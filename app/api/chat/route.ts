@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { askLLM, type ChatTurn } from '@/lib/llm';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function POST(req: NextRequest) {
 	try {
+		const { prisma } = await import('@/lib/db');
 		const { userId, message, sessionId } = (await req.json()) as {
 			userId: string;
 			message: string;
