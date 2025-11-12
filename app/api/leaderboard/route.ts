@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 function scoreFromFollowers(totalFollowers: number) {
 	// Simple log-based scoring
 	return Math.log10(1 + Math.max(0, totalFollowers));

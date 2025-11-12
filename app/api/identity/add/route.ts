@@ -5,6 +5,9 @@ import { normalizeHandle } from '@/lib/utils';
 
 type AddType = 'twitter' | 'farcaster';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
 	try {
 		const { userId, type, value } = (await req.json()) as {

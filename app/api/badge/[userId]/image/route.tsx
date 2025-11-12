@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db';
 import { formatNumber } from '@/lib/utils';
 
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 function escapeXml(unsafe: string) {
 	return unsafe
