@@ -27,6 +27,7 @@ export async function GET(_: Request, { params }: { params: { userId: string } }
 	const archetype = user.archetype || 'Explorer';
 
 	const handle = user.primaryHandle;
+	const host = (process.env.NEXT_PUBLIC_APP_URL || '').replace(/^https?:\/\//, '') || 'your-app';
 	const width = 1200;
 	const height = 630;
 
@@ -59,7 +60,7 @@ export async function GET(_: Request, { params }: { params: { userId: string } }
 
   <g>
     <rect x="740" y="240" width="380" height="160" rx="12" fill="#78E6D0"/>
-    <text x="770" y="335" fill="#0b0f12" font-family="Inter, ui-sans-serif" font-weight="700" font-size="36">Get yours at ${(process.env.NEXT_PUBLIC_APP_URL || '').replace(/^https?:\\/\\//,'') || 'your-app'}</text>
+    <text x="770" y="335" fill="#0b0f12" font-family="Inter, ui-sans-serif" font-weight="700" font-size="36">Get yours at ${host}</text>
   </g>
 </svg>
 `.trim();
