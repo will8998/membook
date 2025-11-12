@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 function scoreFromFollowers(totalFollowers: number) {
 	// Simple log-based scoring
@@ -12,6 +12,7 @@ function scoreFromFollowers(totalFollowers: number) {
 export async function GET(req: NextRequest) {
 	const search = new URL(req.url).searchParams;
 	const limit = Math.min(100, Number(search.get('limit') || 20));
+	const { prisma } = await import('@/lib/db');
 	const rows = await prisma.leaderboard.findMany({
 		orderBy: { influenceScore: 'desc' },
 		include: { user: true },
@@ -29,6 +30,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
+		const { prisma } = await import('@/lib/db');
 		const { userId } = (await req.json()) as { userId: string };
 		if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 });
 		const user = await prisma.user.findUnique({
