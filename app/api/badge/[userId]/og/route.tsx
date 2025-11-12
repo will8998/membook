@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from '@vercel/og';
 import { formatNumber } from '@/lib/utils';
-import { prisma } from '@/lib/db';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -10,6 +9,7 @@ export const revalidate = 0;
 export async function GET(req: Request, { params }: { params: { userId: string } }) {
 	const { userId } = params;
 	const url = new URL(req.url);
+	const { prisma } = await import('@/lib/db');
 	const user = await prisma.user.findUnique({
 		where: { id: userId },
 		include: { socialStats: true, leaderboard: true }

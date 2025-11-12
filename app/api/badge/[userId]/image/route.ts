@@ -1,4 +1,3 @@
-import { prisma } from '@/lib/db';
 import { formatNumber } from '@/lib/utils';
 
 export const runtime = 'nodejs';
@@ -15,6 +14,7 @@ function escapeXml(unsafe: string) {
 }
 
 export async function GET(_: Request, { params }: { params: { userId: string } }) {
+	const { prisma } = await import('@/lib/db');
 	const userId = params.userId;
 	const user = await prisma.user.findUnique({
 		where: { id: userId },
