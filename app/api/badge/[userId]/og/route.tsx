@@ -4,6 +4,7 @@ import { formatNumber } from '@/lib/utils';
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(req: Request, { params }: { params: { userId: string } }) {
 	const { userId } = params;
