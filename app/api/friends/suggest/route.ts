@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { cookies } from 'next/headers';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 declare global {
 	// eslint-disable-next-line no-var
 	var __friendsMem: { userId: string; friendId: string }[] | undefined;
