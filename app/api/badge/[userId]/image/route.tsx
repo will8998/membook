@@ -3,6 +3,7 @@ import { formatNumber } from '@/lib/utils';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 function escapeXml(unsafe: string) {
 	return unsafe
