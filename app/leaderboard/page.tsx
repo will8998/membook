@@ -1,11 +1,12 @@
-import { prisma } from '@/lib/db';
 import { formatNumber } from '@/lib/utils';
 import AddFriendButton from '@/components/AddFriendButton';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function LeaderboardPage({ searchParams }: { searchParams?: { q?: string } }) {
+	const { prisma } = await import('@/lib/db');
 	const q = (searchParams?.q || '').toLowerCase();
 	const leadersInitial = await prisma.leaderboard.findMany({
 		orderBy: { influenceScore: 'desc' },
