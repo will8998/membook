@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
 	const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 	const og = `${appUrl}/api/badge/${params.userId}/og`;

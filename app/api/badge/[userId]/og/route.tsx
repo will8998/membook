@@ -3,6 +3,7 @@ import { ImageResponse } from '@vercel/og';
 import { formatNumber } from '@/lib/utils';
 
 export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request, { params }: { params: { userId: string } }) {
 	const { userId } = params;
