@@ -9,6 +9,7 @@ import { computeArchetypeForUser } from '@/lib/archetype';
 import { getSuggestions } from '@/lib/recommendations';
 import { Suggestions } from '@/components/Suggestions';
 import RightSidebarChat from '@/components/RightSidebarChat';
+import LeftSidebarFriends from '@/components/LeftSidebarFriends';
 
 export default async function ProfilePage({ params }: { params: { userId: string } }) {
 	const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -60,9 +61,10 @@ export default async function ProfilePage({ params }: { params: { userId: string
 		});
 		if (updated) Object.assign(user, updated);
 	}
+	const userId = user.id;
 	const suggestions = getSuggestions(user.archetype);
 	const profile = {
-		userId: user.id,
+		userId: userId,
 		archetype: user.archetype,
 		archetypeReason: user.archetypeReason,
 		referralCode: user.referralCode,
@@ -86,17 +88,17 @@ export default async function ProfilePage({ params }: { params: { userId: string
 		await fetch(`${base}/api/social`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ userId: user.id })
+			body: JSON.stringify({ userId })
 		});
 		await fetch(`${base}/api/archetype`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ userId: user.id })
+			body: JSON.stringify({ userId })
 		});
 		await fetch(`${base}/api/leaderboard`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ userId: user.id })
+			body: JSON.stringify({ userId })
 		});
 	}
 
@@ -108,19 +110,20 @@ export default async function ProfilePage({ params }: { params: { userId: string
 			</div>
 			<ProfileCard profile={profile} />
 			<div className="grid gap-4 md:grid-cols-2">
-				<BadgePreview userId={user.id} />
+				<BadgePreview userId={userId} />
 				<div className="space-y-4">
-					<ShareButtons userId={user.id} referralCode={user.referralCode} />
+					<ShareButtons userId={userId} referralCode={user.referralCode} />
 					<form action={refreshAll}>
 						<button className="btn-secondary mt-2" type="submit">Refresh Data</button>
 					</form>
-					<AddIdentityForm userId={user.id} />
+					<AddIdentityForm userId={userId} />
 					<div className="text-sm text-white/60">
 						Tip: Share your badge link to climb the leaderboard.
 					</div>
 				</div>
 			</div>
-			<Chat userId={user.id} />
+			<Chat userId={userId} />
+			<LeftSidebarFriends />
 			<RightSidebarChat />
 			<Suggestions quests={suggestions.quests} protocols={suggestions.protocols} yields={suggestions.yields} />
 		</div>

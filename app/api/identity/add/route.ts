@@ -24,7 +24,8 @@ export async function POST(req: NextRequest) {
 		if (type === 'farcaster') mem = await MemoryAPI.getIdentityByFarcaster(handle);
 		else mem = await MemoryAPI.getIdentityByTwitter(handle);
 
-		const nodes: any[] = Array.isArray(mem?.data) ? mem.data : mem?.data?.nodes || [];
+		const data: any = (mem as any)?.data;
+		const nodes: any[] = Array.isArray(data) ? data : data?.nodes || [];
 		const node = nodes.find((n) => String(n?.platform).toLowerCase() === type);
 		const avatarUrl = node?.avatar || node?.avatar_url || null;
 		const url = node?.url || null;

@@ -30,7 +30,8 @@ export async function POST(req: NextRequest) {
 			url?: string;
 		}> = [];
 
-		const nodes: any[] = Array.isArray(mem?.data) ? mem.data : mem?.data?.nodes || [];
+		const data: any = (mem as any)?.data;
+		const nodes: any[] = Array.isArray(data) ? data : data?.nodes || [];
 		for (const n of nodes) {
 			const p = String(n?.platform || '').toLowerCase();
 			if (!['farcaster', 'twitter', 'wallet', 'github', 'ens', 'basename'].includes(p)) continue;

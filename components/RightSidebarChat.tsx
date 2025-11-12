@@ -69,8 +69,22 @@ export default function RightSidebarChat() {
 			setInput('');
 			// append the sent message for immediate feedback
 			if (data?.message) {
+				// Mark as seen so upcoming poll doesn't re-add it
+				try {
+					if (data.message?.id) {
+						seenRef.current.add(data.message.id);
+					}
+				} catch {}
 				setMessages((prev) => [...prev, data.message]);
-				setSince(data.message.createdAt);
+				// Advance since cursor to the latest createdAt
+				try {
+					const createdAt: string | undefined = data.message?.createdAt;
+					if (createdAt) {
+						const curr = sinceRef.current ? new Date(sinceRef.current).getTime() : 0;
+						const next = new Date(createdAt).getTime();
+						if (next >= curr) sinceRef.current = createdAt;
+					}
+				} catch {}
 			}
 		} catch (e: any) {
 			setError(e?.message || 'Error');
