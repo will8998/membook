@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { hashIp } from '@/lib/utils';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function POST(req: NextRequest) {
 	try {
+		const { prisma } = await import('@/lib/db');
 		const { refCode } = (await req.json()) as { refCode: string };
 		if (!refCode) return NextResponse.json({ error: 'refCode required' }, { status: 400 });
 		const ip =
