@@ -4,6 +4,9 @@ import { computeArchetypeForUser } from '@/lib/archetype';
 
 type Archetype = 'Builder' | 'Collector' | 'Influencer' | 'Trader';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
 	try {
 		const { userId } = (await req.json()) as { userId: string };
