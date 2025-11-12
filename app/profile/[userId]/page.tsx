@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import { prisma } from '@/lib/db';
 import { ProfileCard } from '@/components/ProfileCard';
 import { BadgePreview } from '@/components/BadgePreview';
 import { Chat } from '@/components/Chat';
@@ -13,9 +12,11 @@ import LeftSidebarFriends from '@/components/LeftSidebarFriends';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function ProfilePage({ params }: { params: { userId: string } }) {
 	const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+	const { prisma } = await import('@/lib/db');
 
 	// Kick off server-side refresh so first load shows data
 	try {
