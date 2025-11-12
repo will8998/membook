@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { cookies } from 'next/headers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 declare global {
 	// eslint-disable-next-line no-var
@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
 	const current = cookieStore.get('mem_user_id')?.value;
 	const userId = url.searchParams.get('userId') || current;
 	if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 });
+	const { prisma } = await import('@/lib/db');
 	try {
 		// @ts-ignore runtime guard
 		if (!(prisma as any).friend?.findMany) throw new Error('no_table');

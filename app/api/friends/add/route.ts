@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { cookies } from 'next/headers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 declare global {
 	// eslint-disable-next-line no-var
@@ -16,6 +16,7 @@ const memFriends = () => {
 
 export async function POST(req: NextRequest) {
 	try {
+		const { prisma } = await import('@/lib/db');
 		const { friendId } = (await req.json()) as { friendId: string };
 		if (!friendId) return NextResponse.json({ error: 'friendId required' }, { status: 400 });
 		const cookieStore = cookies();

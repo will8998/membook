@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { cookies } from 'next/headers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 declare global {
 	// eslint-disable-next-line no-var
@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
 	const limit = Math.min(20, Number(url.searchParams.get('limit') || 10));
 	const cookieStore = cookies();
 	const me = cookieStore.get('mem_user_id')?.value || '';
+	const { prisma } = await import('@/lib/db');
 	// collect friend ids
 	let friendIds: string[] = [];
 	try {
