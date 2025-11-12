@@ -1,8 +1,7 @@
-import { prisma } from '@/lib/db';
-
 export type ArchetypeType = 'Builder' | 'Collector' | 'Influencer' | 'Trader';
 
 export async function computeArchetypeForUser(userId: string): Promise<{ type: ArchetypeType; explanation: string }> {
+	const { prisma } = await import('@/lib/db');
 	const user = await prisma.user.findUnique({
 		where: { id: userId },
 		include: { identities: true, socialStats: true }

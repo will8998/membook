@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { computeArchetypeForUser } from '@/lib/archetype';
 
 type Archetype = 'Builder' | 'Collector' | 'Influencer' | 'Trader';
@@ -15,6 +14,7 @@ export async function POST(req: NextRequest) {
 
 		const { type, explanation } = await computeArchetypeForUser(userId);
 
+		const { prisma } = await import('@/lib/db');
 		await prisma.user.update({
 			where: { id: userId },
 			data: { archetype: type, archetypeReason: explanation }
