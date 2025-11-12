@@ -1,19 +1,26 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from '@vercel/og';
 import { formatNumber } from '@/lib/utils';
+import { prisma } from '@/lib/db';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function GET(req: Request, { params }: { params: { userId: string } }) {
 	const { userId } = params;
 	const url = new URL(req.url);
-	const origin = `${url.protocol}//${url.host}`;
-	const resp = await fetch(`${origin}/api/badge/${userId}/data`, { cache: 'no-store' });
-	if (!resp.ok) return new Response('Not found', { status: 404 });
-	const json = (await resp.json()) as any;
-	const d = json.data;
+	const user = await prisma.user.findUnique({
+		where: { id: userId },
+		include: { socialStats: true, leaderboard: true }
+	});
+	if (!user) return new Response('Not found', { status: 404 });
+	const d = {
+		handle: user.primaryHandle,
+		archetype: user.archetype || 'Explorer',
+		rank: user.leaderboard?.rank ?? null,
+		totalFollowers: user.socialStats.reduce((a, s) => a + s.followers, 0)
+	};
 
 	return new ImageResponse(
 		(
