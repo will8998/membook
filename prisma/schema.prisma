@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id              String        @id @default(cuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  primaryHandle   String        @unique
+  referralCode    String        @unique
+
+  archetype       String?
+  archetypeReason String?
+
+  identities      Identity[]
+  socialStats     SocialStats[]
+  leaderboard     Leaderboard?
+  chatSessions    ChatSession[]
+}
+
+model Identity {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  platform   String
+  handle     String
+  externalId String?
+  avatarUrl  String?
+  url        String?
+
+  @@index([userId, platform])
+}
+
+model SocialStats {
+  id         String    @id @default(cuid())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String
+  platform   String
+  followers  Int       @default(0)
+  following  Int       @default(0)
+  postsCount Int       @default(0)
+  updatedAt  DateTime  @updatedAt
+
+  @@index([userId, platform])
+}
+
+model ReferralHit {
+  id             String   @id @default(cuid())
+  refCode        String
+  referredUserId String?
+  ipHash         String
+  createdAt      DateTime @default(now())
+}
+
+model Leaderboard {
+  userId         String   @id
+  user           User     @relation(fields: [userId], references: [id])
+  influenceScore Float
+  rank           Int?
+  updatedAt      DateTime @updatedAt
+}
+
+model ChatSession {
+  id        String        @id @default(cuid())
+  user      User          @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime      @default(now())
+  messages  ChatMessage[]
+}
+
+model ChatMessage {
+  id         String      @id @default(cuid())
+  session    ChatSession @relation(fields: [sessionId], references: [id])
+  sessionId  String
+  role       String
+  content    String
+  createdAt  DateTime    @default(now())
+}
+
+model PublicMessage {
+  id        String   @id @default(cuid())
+  userId    String?
+  handle    String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Friend {
+  id        String   @id @default(cuid())
+  userId    String
+  friendId  String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, friendId])
+}
+
+

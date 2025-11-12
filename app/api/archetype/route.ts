@@ -1,0 +1,25 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/db';
+import { computeArchetypeForUser } from '@/lib/archetype';
+
+type Archetype = 'Builder' | 'Collector' | 'Influencer' | 'Trader';
+
+export async function POST(req: NextRequest) {
+	try {
+		const { userId } = (await req.json()) as { userId: string };
+		if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 });
+
+		const { type, explanation } = await computeArchetypeForUser(userId);
+
+		await prisma.user.update({
+			where: { id: userId },
+			data: { archetype: type, archetypeReason: explanation }
+		});
+
+		return NextResponse.json({ type, explanation });
+	} catch (err: any) {
+		return new NextResponse(err?.message || 'Failed archetype', { status: 500 });
+	}
+}
+
+

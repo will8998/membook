@@ -1,0 +1,130 @@
+/* eslint-disable @next/next/no-img-element */
+import { prisma } from '@/lib/db';
+import { ProfileCard } from '@/components/ProfileCard';
+import { BadgePreview } from '@/components/BadgePreview';
+import { Chat } from '@/components/Chat';
+import { ShareButtons } from '@/components/ShareButtons';
+import AddIdentityForm from '@/components/AddIdentityForm';
+import { computeArchetypeForUser } from '@/lib/archetype';
+import { getSuggestions } from '@/lib/recommendations';
+import { Suggestions } from '@/components/Suggestions';
+import RightSidebarChat from '@/components/RightSidebarChat';
+
+export default async function ProfilePage({ params }: { params: { userId: string } }) {
+	const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+	// Kick off server-side refresh so first load shows data
+	try {
+		await Promise.all([
+			fetch(`${baseUrl}/api/social`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ userId: params.userId }),
+				cache: 'no-store'
+			}),
+			fetch(`${baseUrl}/api/archetype`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ userId: params.userId }),
+				cache: 'no-store'
+			})
+		]);
+		await fetch(`${baseUrl}/api/leaderboard`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ userId: params.userId }),
+			cache: 'no-store'
+		});
+	} catch {
+		// best-effort refresh; ignore failures for first paint
+	}
+
+	const user = await prisma.user.findUnique({
+		where: { id: params.userId },
+		include: { identities: true, socialStats: true, leaderboard: true }
+	});
+	if (!user) {
+		return <div className="text-white/70">User not found</div>;
+	}
+	// Ensure archetype exists (self-heal)
+	if (!user.archetype) {
+		const { type, explanation } = await computeArchetypeForUser(user.id);
+		await prisma.user.update({
+			where: { id: user.id },
+			data: { archetype: type, archetypeReason: explanation }
+		});
+		// re-read user after update
+		const updated = await prisma.user.findUnique({
+			where: { id: params.userId },
+			include: { identities: true, socialStats: true, leaderboard: true }
+		});
+		if (updated) Object.assign(user, updated);
+	}
+	const suggestions = getSuggestions(user.archetype);
+	const profile = {
+		userId: user.id,
+		archetype: user.archetype,
+		archetypeReason: user.archetypeReason,
+		referralCode: user.referralCode,
+		identities: user.identities.map((i) => ({
+			platform: i.platform,
+			handle: i.handle,
+			url: i.url,
+			avatarUrl: i.avatarUrl
+		})),
+		socialStats: user.socialStats.map((s) => ({
+			platform: s.platform,
+			followers: s.followers,
+			following: s.following
+		})),
+		leaderboardRank: user.leaderboard?.rank ?? null
+	};
+
+	async function refreshAll() {
+		'use server';
+		const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+		await fetch(`${base}/api/social`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ userId: user.id })
+		});
+		await fetch(`${base}/api/archetype`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ userId: user.id })
+		});
+		await fetch(`${base}/api/leaderboard`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ userId: user.id })
+		});
+	}
+
+	return (
+		<div className="space-y-6">
+			<div className="flex items-center justify-between">
+				<a href="/" className="btn-secondary">← Back</a>
+				<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
+			</div>
+			<ProfileCard profile={profile} />
+			<div className="grid gap-4 md:grid-cols-2">
+				<BadgePreview userId={user.id} />
+				<div className="space-y-4">
+					<ShareButtons userId={user.id} referralCode={user.referralCode} />
+					<form action={refreshAll}>
+						<button className="btn-secondary mt-2" type="submit">Refresh Data</button>
+					</form>
+					<AddIdentityForm userId={user.id} />
+					<div className="text-sm text-white/60">
+						Tip: Share your badge link to climb the leaderboard.
+					</div>
+				</div>
+			</div>
+			<Chat userId={user.id} />
+			<RightSidebarChat />
+			<Suggestions quests={suggestions.quests} protocols={suggestions.protocols} yields={suggestions.yields} />
+		</div>
+	);
+}
+
+
