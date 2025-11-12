@@ -11,6 +11,9 @@ import { Suggestions } from '@/components/Suggestions';
 import RightSidebarChat from '@/components/RightSidebarChat';
 import LeftSidebarFriends from '@/components/LeftSidebarFriends';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export default async function ProfilePage({ params }: { params: { userId: string } }) {
 	const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 

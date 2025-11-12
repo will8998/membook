@@ -1,5 +1,8 @@
 import { cookies } from 'next/headers';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export default async function ReferralsPage() {
 	const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 	const statsRes = await fetch(`${base}/api/referral/stats`, { cache: 'no-store' });
