@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { cookies } from 'next/headers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 declare global {
 	// eslint-disable-next-line no-var
@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
 	const since = url.searchParams.get('since');
 	const where = since ? { createdAt: { gt: new Date(since) } } : {};
 	try {
+		const { prisma } = await import('@/lib/db');
 		// @ts-ignore runtime presence depends on migration
 		if (!(prisma as any).publicMessage?.findMany) throw new Error('no_table');
 		const rows = await (prisma as any).publicMessage.findMany({
@@ -44,10 +45,12 @@ export async function POST(req: NextRequest) {
 		const userId = body?.userId || cookieUser || null;
 		let handle = 'anon';
 		if (userId) {
+			const { prisma } = await import('@/lib/db');
 			const user = await prisma.user.findUnique({ where: { id: userId } });
 			if (user) handle = user.primaryHandle;
 		}
 		try {
+			const { prisma } = await import('@/lib/db');
 			// @ts-ignore guarded for runtime absence
 			if (!(prisma as any).publicMessage?.create) throw new Error('no_table');
 			const msg = await (prisma as any).publicMessage.create({
