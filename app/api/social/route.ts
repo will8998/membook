@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { MemoryAPI } from '@/lib/memoryClient';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function POST(req: NextRequest) {
 	try {
+		const { prisma } = await import('@/lib/db');
 		const body = (await req.json()) as { userId: string };
 		if (!body?.userId) return NextResponse.json({ error: 'userId required' }, { status: 400 });
 		const user = await prisma.user.findUnique({
