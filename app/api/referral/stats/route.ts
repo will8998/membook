@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { cookies } from 'next/headers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(req: NextRequest) {
+	const { prisma } = await import('@/lib/db');
 	const cookieStore = cookies();
 	const userId = cookieStore.get('mem_user_id')?.value;
 	if (!userId) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
