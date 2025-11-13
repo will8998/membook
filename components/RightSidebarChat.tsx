@@ -94,13 +94,13 @@ export default function RightSidebarChat() {
 	};
 
 	return (
-		<aside className="hidden lg:block sticky top-4 self-start">
-			<div className="">
-				<div className="card flex flex-col max-h-[80vh]">
+		<aside className="hidden lg:block sticky top-4 self-start w-full">
+			<div className="w-full">
+				<div className="card flex flex-col max-h-[80vh] w-full">
 					<div className="px-3 py-2 border-b border-white/10 text-sm font-medium">Global Chat</div>
 					<div className="flex-1 overflow-auto p-3 space-y-2">
 						{messages.map((m) => (
-							<div key={m.id}>
+							<div key={m.id} className="break-words whitespace-pre-wrap max-w-full">
 								<span className="text-[var(--mem-accent)]">{m.handle}:</span>{' '}
 								<span className="text-white/90">{m.content}</span>
 							</div>
@@ -109,9 +109,9 @@ export default function RightSidebarChat() {
 					</div>
 					<div className="p-3 border-t border-white/10">
 						{error && <div className="text-red-400 text-xs mb-1">{error}</div>}
-						<div className="flex gap-2">
+						<div className="flex gap-2 items-center">
 							<input
-								className="flex-1 bg-black/30 rounded-md px-3 py-2 border border-white/10"
+								className="flex-1 min-w-0 bg-black/30 rounded-md px-3 py-2 border border-white/10"
 								placeholder="Say something..."
 								value={input}
 								onChange={(e) => setInput(e.target.value)}
@@ -119,7 +119,7 @@ export default function RightSidebarChat() {
 									if (e.key === 'Enter') send();
 								}}
 							/>
-							<button className="btn-secondary" onClick={send} disabled={loading}>
+							<button className="btn-secondary shrink-0 px-3" onClick={send} disabled={loading}>
 								Send
 							</button>
 						</div>
