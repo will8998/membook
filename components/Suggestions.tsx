@@ -10,7 +10,7 @@ export function Suggestions({
 	yields: Suggestion[];
 }) {
 	return (
-		<div className="grid gap-4 md:grid-cols-3">
+		<div className="grid gap-4 grid-cols-1">
 			<div className="card p-4 space-y-3">
 				<div className="text-sm font-medium">Suggested quests that fit your interest</div>
 				<ul className="space-y-2 text-sm">

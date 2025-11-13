@@ -117,7 +117,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 					<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
 				</div>
 				<ProfileCard profile={profile} />
-				<div className="grid gap-4 md:grid-cols-2">
+				<div className="grid gap-4">
 					<BadgePreview userId={userId} />
 					<div className="space-y-4">
 						<ShareButtons userId={userId} referralCode={user.referralCode} />
