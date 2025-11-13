@@ -130,16 +130,18 @@ export default async function ProfilePage({ params }: { params: { userId: string
 				<ProfileCard profile={profile} currentUserId={currentUserId} />
 				<div className="grid gap-4">
 					<BadgePreview userId={userId} />
-					<div className="space-y-4">
-						<ShareButtons userId={userId} referralCode={user.referralCode} />
-						<form action={refreshAll}>
-							<button className="btn-secondary mt-2" type="submit">Refresh Data</button>
-						</form>
-						<AddIdentityForm userId={userId} />
-						<div className="text-sm text-white/60">
-							Tip: Share your badge link to climb the leaderboard.
+					{currentUserId === userId && (
+						<div className="space-y-4">
+							<ShareButtons userId={userId} referralCode={user.referralCode} />
+							<form action={refreshAll}>
+								<button className="btn-secondary mt-2" type="submit">Refresh Data</button>
+							</form>
+							<AddIdentityForm userId={userId} />
+							<div className="text-sm text-white/60">
+								Tip: Share your badge link to climb the leaderboard.
+							</div>
 						</div>
-					</div>
+					)}
 				</div>
 				{/* Feed moved to /feed */}
 				{currentUserId === userId && <Chat userId={userId} />}
