@@ -1,8 +1,14 @@
+import { headers } from 'next/headers';
+
 export function ShareButtons({ userId, referralCode }: { userId: string; referralCode: string }) {
-	const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
-	const profileUrl = `${appUrl}/profile/${userId}?ref=${referralCode}`;
-	const shareUrl = `${appUrl}/share/${userId}?ref=${referralCode}`;
-	const ogUrl = `${appUrl}/api/badge/${userId}/og`;
+	const envBase = process.env.NEXT_PUBLIC_APP_URL || '';
+	// Ensure absolute URLs for social crawlers (Twitter requires absolute)
+	const host = headers().get('host') || 'localhost:3000';
+	const protocol = process.env.VERCEL ? 'https' : 'http';
+	const baseUrl = (envBase && /^https?:\/\//.test(envBase)) ? envBase.replace(/\/$/, '') : `${protocol}://${host}`;
+	const profileUrl = `${baseUrl}/profile/${userId}?ref=${referralCode}`;
+	const shareUrl = `${baseUrl}/share/${userId}?ref=${referralCode}`;
+	const ogUrl = `${baseUrl}/api/badge/${userId}/og`;
 	const text = encodeURIComponent('Get your Memory Badge');
 	// Twitter will pick up the OG image from the share page
 	const twitter = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareUrl)}`;
