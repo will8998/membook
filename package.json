@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "echo \"no lint configured\"",
     "prisma:generate": "prisma generate",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma migrate deploy && next build"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
