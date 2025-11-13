@@ -115,6 +115,14 @@ export const MemoryAPI = {
 		const search = new URLSearchParams();
 		if (cursor) search.set('cursor', cursor);
 		return pollUntilReady(`/social/${platform}/username/${encodeURIComponent(handle)}/posts?${search.toString()}`);
+	},
+	getTwitterProfile(username: string) {
+		const params = new URLSearchParams({ username });
+		return memFetch(`/twitter/profile?${params.toString()}`);
+	},
+	getFarcasterProfile(username: string) {
+		const params = new URLSearchParams({ username });
+		return memFetch(`/farcaster/profile?${params.toString()}`);
 	}
 };
 
