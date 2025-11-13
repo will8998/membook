@@ -56,5 +56,9 @@ if (process.env.NODE_ENV !== 'production') global.prisma = prisma;
 
 // Fire-and-forget schema setup for SQLite
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-ensureSchema(prisma);
+if ((process.env.DATABASE_URL || '').startsWith('file:')) {
+	// Only auto-create tables when using SQLite files
+	// eslint-disable-next-line @typescript-eslint/no-floating-promises
+	ensureSchema(prisma);
+}
 

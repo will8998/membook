@@ -1,3 +1,4 @@
+import type { DMMessage } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
@@ -25,7 +26,7 @@ export async function GET(req: NextRequest) {
 			take: 500
 		});
 		return NextResponse.json({
-			messages: msgs.map((m) => ({
+			messages: msgs.map((m: DMMessage) => ({
 				id: m.id,
 				senderId: m.senderId,
 				receiverId: m.receiverId,
