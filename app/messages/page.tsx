@@ -1,3 +1,4 @@
+import BackButton from '@/components/ui/BackButton';
 import DMChat from '@/components/DMChat';
 
 export const runtime = 'nodejs';
@@ -9,7 +10,7 @@ export default function MessagesPage({ searchParams }: { searchParams?: { to?: s
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
-				<a href="/" className="btn-secondary">← Back</a>
+				<BackButton />
 				<h1 className="text-2xl font-semibold">Messages</h1>
 				<div />
 			</div>
