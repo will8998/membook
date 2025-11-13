@@ -12,6 +12,7 @@ import LeftSidebarFriends from '@/components/LeftSidebarFriends';
 import AddFriendButton from '@/components/AddFriendButton';
 import { cookies } from 'next/headers';
 import Feed from '@/components/Feed';
+import TopTabs from '@/components/TopTabs';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -125,15 +126,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 				<LeftSidebarFriends />
 			</div>
 			<div className="lg:col-span-6 space-y-6">
-				<div className="flex items-center justify-between">
-					<div />
-					<div className="flex gap-2">
-						{currentUserId !== userId && <AddFriendButton friendId={userId} />}
-						<a href="/feed" className="btn-secondary">Feed</a>
-						<a href="/referrals" className="btn-secondary">Referrals</a>
-						<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
-					</div>
-				</div>
+				<TopTabs currentUserId={currentUserId} />
 				<ProfileCard profile={profile} currentUserId={currentUserId} />
 				<div className="grid gap-4">
 					<BadgePreview userId={userId} />
