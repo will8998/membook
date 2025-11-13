@@ -11,7 +11,7 @@ export default function TopNav() {
 			<div className="flex items-center gap-2">
 				{userId && <BackButton />}
 				<Link href="/" className="text-lg font-semibold">
-					Memory Badge
+					MemBook
 				</Link>
 			</div>
 			<div className="flex items-center gap-2">
