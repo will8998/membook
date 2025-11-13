@@ -3,9 +3,11 @@ import { formatNumber } from '@/lib/utils';
 
 export type Profile = {
 	userId: string;
+	primaryHandle?: string;
 	archetype?: string | null;
 	archetypeReason?: string | null;
 	referralCode: string;
+	walletAddress?: string | null;
 	identities: Array<{
 		platform: string;
 		handle: string;
@@ -44,6 +46,12 @@ export function ProfileCard({ profile }: { profile: Profile }) {
 					<div className="text-xl font-semibold">{profile.leaderboardRank ?? '-'}</div>
 				</div>
 			</div>
+			{profile.walletAddress && (
+				<div className="bg-white/5 rounded-md p-3">
+					<div className="text-sm text-white/70">Wallet</div>
+					<div className="text-sm font-mono break-all">{profile.walletAddress}</div>
+				</div>
+			)}
 			<div className="space-y-2">
 				<div className="text-sm font-medium">Identities</div>
 				<div className="flex flex-wrap gap-2">

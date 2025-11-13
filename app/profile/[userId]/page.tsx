@@ -66,12 +66,20 @@ export default async function ProfilePage({ params }: { params: { userId: string
 		if (updated) Object.assign(user, updated);
 	}
 	const userId = user.id;
+	const walletAddress = user.identities.find((i) => i.platform === 'wallet')?.handle || null;
+	const preferredHandle =
+		user.identities.find((i) => i.platform === 'farcaster')?.handle ||
+		user.identities.find((i) => i.platform === 'twitter')?.handle ||
+		walletAddress ||
+		user.primaryHandle;
 	const suggestions = getSuggestions(user.archetype);
 	const profile = {
 		userId: userId,
+		primaryHandle: user.primaryHandle,
 		archetype: user.archetype,
 		archetypeReason: user.archetypeReason,
 		referralCode: user.referralCode,
+		walletAddress,
 		identities: user.identities.map((i) => ({
 			platform: i.platform,
 			handle: i.handle,
@@ -114,7 +122,10 @@ export default async function ProfilePage({ params }: { params: { userId: string
 			<div className="lg:col-span-6 space-y-6">
 				<div className="flex items-center justify-between">
 					<a href="/" className="btn-secondary">← Back</a>
-					<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
+					<div className="flex gap-2">
+						<a href="#chat" className="btn-secondary">Message user</a>
+						<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
+					</div>
 				</div>
 				<ProfileCard profile={profile} />
 				<div className="grid gap-4">
@@ -130,7 +141,9 @@ export default async function ProfilePage({ params }: { params: { userId: string
 						</div>
 					</div>
 				</div>
-				<Chat userId={userId} />
+				<div id="chat">
+					<Chat userId={userId} initialTo={preferredHandle ? `@${preferredHandle}` : undefined} />
+				</div>
 				<Suggestions quests={suggestions.quests} protocols={suggestions.protocols} yields={suggestions.yields} />
 			</div>
 			<div className="hidden lg:block lg:col-span-3">

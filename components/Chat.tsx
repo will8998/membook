@@ -1,12 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export function Chat({ userId }: { userId: string }) {
+export function Chat({ userId, initialTo }: { userId: string; initialTo?: string }) {
 	const [sessionId, setSessionId] = useState<string | null>(null);
 	const [input, setInput] = useState('');
 	const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
 	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		if (initialTo && !input) {
+			setInput(`${initialTo} `);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initialTo]);
 
 	const send = async () => {
 		if (!input.trim()) return;
