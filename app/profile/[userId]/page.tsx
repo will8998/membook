@@ -9,6 +9,8 @@ import { getSuggestions } from '@/lib/recommendations';
 import { Suggestions } from '@/components/Suggestions';
 import RightSidebarChat from '@/components/RightSidebarChat';
 import LeftSidebarFriends from '@/components/LeftSidebarFriends';
+import AddFriendButton from '@/components/AddFriendButton';
+import { cookies } from 'next/headers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -17,6 +19,8 @@ export const revalidate = 0;
 export default async function ProfilePage({ params }: { params: { userId: string } }) {
 	const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 	const { prisma } = await import('@/lib/db');
+	const cookieStore = cookies();
+	const currentUserId = cookieStore.get('mem_user_id')?.value || null;
 
 	// Kick off server-side refresh so first load shows data
 	try {
@@ -123,6 +127,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 				<div className="flex items-center justify-between">
 					<a href="/" className="btn-secondary">← Back</a>
 					<div className="flex gap-2">
+						{currentUserId !== userId && <AddFriendButton friendId={userId} />}
 						<a href="#chat" className="btn-secondary">Message user</a>
 						<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
 					</div>
