@@ -32,6 +32,28 @@ async function memFetch<T>(path: string, init?: RequestInit): Promise<MemoryResp
 	return (await res.json()) as MemoryResponse<T>;
 }
 
+function parseStatusCode(err: any): number | null {
+	const msg = String(err?.message || '');
+	const m = msg.match(/Memory API\s+(\d{3})/);
+	return m ? Number(m[1]) : null;
+}
+
+async function tryPaths<T>(paths: string[]): Promise<MemoryResponse<T>> {
+	let lastErr: any = null;
+	for (const p of paths) {
+		try {
+			// eslint-disable-next-line no-await-in-loop
+			return await memFetch<T>(p);
+		} catch (e: any) {
+			lastErr = e;
+			const code = parseStatusCode(e);
+			// For 5xx, bubble up immediately; for 4xx try next path
+			if (code && code >= 500) throw e;
+		}
+	}
+	throw lastErr;
+}
+
 async function pollUntilReady<T>(
 	path: string,
 	{
@@ -55,13 +77,16 @@ async function pollUntilReady<T>(
 
 export const MemoryAPI = {
 	getIdentityByWallet(address: string) {
-		return memFetch(`/identities/wallet/${encodeURIComponent(address)}`);
+		const a = encodeURIComponent(address);
+		return tryPaths([`/identities/wallet/${a}`, `/identity/wallet/${a}`]);
 	},
 	getIdentityByFarcaster(username: string) {
-		return memFetch(`/identities/farcaster/username/${encodeURIComponent(username)}`);
+		const u = encodeURIComponent(username);
+		return tryPaths([`/identities/farcaster/username/${u}`, `/identity/farcaster/username/${u}`]);
 	},
 	getIdentityByTwitter(username: string) {
-		return memFetch(`/identities/twitter/username/${encodeURIComponent(username)}`);
+		const u = encodeURIComponent(username);
+		return tryPaths([`/identities/twitter/username/${u}`, `/identity/twitter/username/${u}`]);
 	},
 	getFollowers(platform: 'twitter' | 'farcaster', handle: string, cursor?: string) {
 		const search = new URLSearchParams();
