@@ -4,13 +4,14 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export default async function ReferralsPage() {
-	const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-	const statsRes = await fetch(`${base}/api/referral/stats`, { cache: 'no-store' });
+	// Use relative URL so auth cookies are included server-side
+	const statsRes = await fetch('/api/referral/stats', { cache: 'no-store' });
 	if (!statsRes.ok) {
 		return <div className="text-white/70">Please connect or create a profile to view your referral stats.</div>;
 	}
 	const stats = await statsRes.json();
-	const link = `${base}/?ref=${stats.refCode}`;
+	const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
+	const link = `${appUrl}/?ref=${stats.refCode}`;
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
