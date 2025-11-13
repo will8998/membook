@@ -10,6 +10,7 @@ export async function GET() {
 		const me = cookies().get('mem_user_id')?.value || null;
 		if (!me) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 		const { prisma } = await import('@/lib/db');
+		const db: any = prisma as any;
 
 		// Friends
 		const friends = await prisma.friend.findMany({
@@ -20,7 +21,7 @@ export async function GET() {
 		const friendUsers = friends.map((f) => f.friend);
 
 		// Recent DM partners
-		const recent = await prisma.dMMessage.findMany({
+		const recent = await db.dMMessage.findMany({
 			where: { OR: [{ senderId: me }, { receiverId: me }] },
 			orderBy: { createdAt: 'desc' },
 			take: 200

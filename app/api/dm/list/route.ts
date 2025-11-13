@@ -13,7 +13,8 @@ export async function GET(req: NextRequest) {
 		const peerId = url.searchParams.get('peerId');
 		if (!peerId) return NextResponse.json({ error: 'peerId required' }, { status: 400 });
 		const { prisma } = await import('@/lib/db');
-		const msgs = await prisma.dMMessage.findMany({
+		const db: any = prisma as any;
+		const msgs = await db.dMMessage.findMany({
 			where: {
 				OR: [
 					{ senderId: me, receiverId: peerId },

@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
 		if (!content) return NextResponse.json({ error: 'Empty content' }, { status: 400 });
 		if (content.length > 1000) return NextResponse.json({ error: 'Too long' }, { status: 400 });
 		const { prisma } = await import('@/lib/db');
-		const msg = await prisma.dMMessage.create({
+		const db: any = prisma as any;
+		const msg = await db.dMMessage.create({
 			data: {
 				id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
 				senderId: me,

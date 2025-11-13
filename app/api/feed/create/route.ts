@@ -14,7 +14,9 @@ export async function POST(req: NextRequest) {
 		const userId = cookies().get('mem_user_id')?.value || null;
 		if (!userId) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 		const { prisma } = await import('@/lib/db');
-		const post = await prisma.post.create({
+		// Cast to any to avoid type errors if Prisma Client hasn't regenerated yet
+		const db: any = prisma as any;
+		const post = await db.post.create({
 			data: { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, userId, content }
 		});
 		return NextResponse.json({ ok: true, post });

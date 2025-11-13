@@ -7,10 +7,11 @@ export const revalidate = 0;
 export async function GET(req: NextRequest) {
 	try {
 		const { prisma } = await import('@/lib/db');
+		const db: any = prisma as any;
 		const url = new URL(req.url);
 		const userId = url.searchParams.get('userId') || undefined;
 		const limit = Math.min(100, Number(url.searchParams.get('limit') || 50));
-		const posts = await prisma.post.findMany({
+		const posts = await db.post.findMany({
 			where: userId ? { userId } : {},
 			orderBy: { createdAt: 'desc' },
 			include: { },
