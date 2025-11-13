@@ -82,11 +82,23 @@ export const MemoryAPI = {
 	},
 	getIdentityByFarcaster(username: string) {
 		const u = encodeURIComponent(username);
-		return tryPaths([`/identities/farcaster/username/${u}`, `/identity/farcaster/username/${u}`]);
+		return tryPaths([
+			// Newer docs
+			`/identities/farcaster/${u}`,
+			// Older/alternate paths
+			`/identities/farcaster/username/${u}`,
+			`/identity/farcaster/username/${u}`
+		]);
 	},
 	getIdentityByTwitter(username: string) {
 		const u = encodeURIComponent(username);
-		return tryPaths([`/identities/twitter/username/${u}`, `/identity/twitter/username/${u}`]);
+		return tryPaths([
+			// As documented: /identities/twitter/{username}
+			`/identities/twitter/${u}`,
+			// Older/alternate paths
+			`/identities/twitter/username/${u}`,
+			`/identity/twitter/username/${u}`
+		]);
 	},
 	getFollowers(platform: 'twitter' | 'farcaster', handle: string, cursor?: string) {
 		const search = new URLSearchParams();
