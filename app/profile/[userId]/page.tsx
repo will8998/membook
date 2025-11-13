@@ -142,6 +142,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 					</div>
 				</div>
 				{/* Feed moved to /feed */}
+				{currentUserId === userId && <Chat userId={userId} />}
 				<Suggestions quests={suggestions.quests} protocols={suggestions.protocols} yields={suggestions.yields} />
 			</div>
 			<div className="hidden lg:block lg:col-span-3">
