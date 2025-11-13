@@ -20,6 +20,12 @@ export default function TopNav() {
 						<Link href={`/profile/${userId}`} className="btn-secondary">
 							Dashboard
 						</Link>
+						<Link href="/referrals" className="btn-secondary">
+							Referrals
+						</Link>
+						<Link href="/leaderboard" className="btn-secondary">
+							Leaderboard
+						</Link>
 						<SignOutButton />
 					</>
 				) : (
