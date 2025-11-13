@@ -126,7 +126,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 				<LeftSidebarFriends />
 			</div>
 			<div className="lg:col-span-6 space-y-6">
-				<TopTabs currentUserId={currentUserId} />
+				{currentUserId === userId && <TopTabs currentUserId={currentUserId} />}
 				<ProfileCard profile={profile} currentUserId={currentUserId} />
 				<div className="grid gap-4">
 					<BadgePreview userId={userId} />
