@@ -129,6 +129,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 					<div className="flex gap-2">
 						{currentUserId !== userId && <AddFriendButton friendId={userId} />}
 						<a href="#chat" className="btn-secondary">Message user</a>
+						<a href="/referrals" className="btn-secondary">Referrals</a>
 						<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
 					</div>
 				</div>
