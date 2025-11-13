@@ -22,6 +22,7 @@ model User {
   leaderboard     Leaderboard?
   chatSessions    ChatSession[]
   publicMessages  PublicMessage[]
+  posts           Post[]
   friendsAdded    Friend[]      @relation("UserFriends")
   friendsOf       Friend[]      @relation("FriendOf")
   dmsSent         DMMessage[]   @relation("DMSent")
