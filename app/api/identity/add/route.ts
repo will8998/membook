@@ -51,8 +51,15 @@ export async function POST(req: NextRequest) {
 
 		return NextResponse.json({ ok: true });
 	} catch (err: any) {
-		const message = err?.message || 'Failed to add identity';
-		return NextResponse.json({ error: message }, { status: 500 });
+		const raw = String(err?.message || '');
+		// Map Memory API errors to friendly responses
+		if (/Memory API\\s+404/.test(raw)) {
+			return NextResponse.json({ error: 'Handle not found on the selected platform.' }, { status: 404 });
+		}
+		if (/Memory API\\s+401/.test(raw)) {
+			return NextResponse.json({ error: 'Memory API key missing or invalid.' }, { status: 502 });
+		}
+		return NextResponse.json({ error: raw || 'Failed to add identity' }, { status: 500 });
 	}
 }
 

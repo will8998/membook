@@ -109,7 +109,14 @@ export async function POST(req: NextRequest) {
 		} catch {}
 		return res;
 	} catch (err: any) {
-		return new NextResponse(err?.message || 'Failed to resolve identity', { status: 500 });
+		const raw = String(err?.message || '');
+		if (/Memory API\\s+404/.test(raw)) {
+			return new NextResponse('Identity not found on the selected platform', { status: 404 });
+		}
+		if (/Memory API\\s+401/.test(raw)) {
+			return new NextResponse('Memory API key missing or invalid', { status: 502 });
+		}
+		return new NextResponse(raw || 'Failed to resolve identity', { status: 500 });
 	}
 }
 
