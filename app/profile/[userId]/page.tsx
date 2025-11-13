@@ -126,7 +126,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 			</div>
 			<div className="lg:col-span-6 space-y-6">
 				<div className="flex items-center justify-between">
-					<a href="/" className="btn-secondary">← Back</a>
+					<div />
 					<div className="flex gap-2">
 						{currentUserId !== userId && <AddFriendButton friendId={userId} />}
 						<a href="#feed" className="btn-secondary">Feed</a>
