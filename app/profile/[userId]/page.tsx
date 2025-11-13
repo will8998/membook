@@ -130,12 +130,11 @@ export default async function ProfilePage({ params }: { params: { userId: string
 					<div className="flex gap-2">
 						{currentUserId !== userId && <AddFriendButton friendId={userId} />}
 						<a href="/feed" className="btn-secondary">Feed</a>
-						<a href={`/messages?to=${userId}`} className="btn-secondary">Message user</a>
 						<a href="/referrals" className="btn-secondary">Referrals</a>
 						<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
 					</div>
 				</div>
-				<ProfileCard profile={profile} />
+				<ProfileCard profile={profile} currentUserId={currentUserId} />
 				<div className="grid gap-4">
 					<BadgePreview userId={userId} />
 					<div className="space-y-4">

@@ -22,19 +22,24 @@ export type Profile = {
 	leaderboardRank?: number | null;
 };
 
-export function ProfileCard({ profile }: { profile: Profile }) {
+export function ProfileCard({ profile, currentUserId }: { profile: Profile; currentUserId?: string | null }) {
 	const avatar =
 		profile.identities.find((i) => i.avatarUrl)?.avatarUrl ||
 		'https://avatars.githubusercontent.com/u/9919?s=200&v=4';
 	const totalFollowers = profile.socialStats.reduce((a, s) => a + s.followers, 0);
 	return (
 		<div className="card p-6 space-y-4">
-			<div className="flex items-center gap-4">
-				<img src={avatar} alt="" className="h-16 w-16 rounded-full border-2 border-[var(--mem-accent)]" />
-				<div>
-					<div className="text-lg font-semibold">Unified Profile</div>
-					<div className="text-white/70 text-sm">{profile.archetype || 'Unknown archetype'}</div>
+			<div className="flex items-center justify-between gap-4">
+				<div className="flex items-center gap-4">
+					<img src={avatar} alt="" className="h-16 w-16 rounded-full border-2 border-[var(--mem-accent)]" />
+					<div>
+						<div className="text-lg font-semibold">Unified Profile</div>
+						<div className="text-white/70 text-sm">{profile.archetype || 'Unknown archetype'}</div>
+					</div>
 				</div>
+				{currentUserId !== profile.userId && (
+					<a href={`/messages?to=${profile.userId}`} className="btn-secondary">Message user</a>
+				)}
 			</div>
 			<div className="grid grid-cols-2 gap-3">
 				<div className="bg-white/5 rounded-md p-3">
