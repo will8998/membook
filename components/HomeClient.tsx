@@ -58,9 +58,6 @@ export default function HomeClient() {
 					<a className="btn-secondary" href="/leaderboard">
 						Leaderboard
 					</a>
-					<a className="btn-secondary" href="/referrals">
-						Referrals
-					</a>
 				</div>
 			</header>
 			<section className="card p-6">

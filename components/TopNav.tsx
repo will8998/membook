@@ -9,7 +9,7 @@ export default function TopNav() {
 	return (
 		<nav className="flex items-center justify-between py-2 gap-3">
 			<div className="flex items-center gap-2">
-				<BackButton />
+				{userId && <BackButton />}
 				<Link href="/" className="text-lg font-semibold">
 					Memory Badge
 				</Link>
