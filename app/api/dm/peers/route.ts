@@ -1,3 +1,4 @@
+import type { DMMessage } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
@@ -29,7 +30,7 @@ export async function GET() {
 		const partnerIds = Array.from(
 			new Set(
 				recent
-					.map((m) => (m.senderId === me ? m.receiverId : m.senderId))
+					.map((m: DMMessage) => (m.senderId === me ? m.receiverId : m.senderId))
 					.filter(Boolean) as string[]
 			)
 		);
