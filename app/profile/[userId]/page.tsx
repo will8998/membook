@@ -11,6 +11,7 @@ import RightSidebarChat from '@/components/RightSidebarChat';
 import LeftSidebarFriends from '@/components/LeftSidebarFriends';
 import AddFriendButton from '@/components/AddFriendButton';
 import { cookies } from 'next/headers';
+import Feed from '@/components/Feed';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -128,6 +129,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 					<a href="/" className="btn-secondary">← Back</a>
 					<div className="flex gap-2">
 						{currentUserId !== userId && <AddFriendButton friendId={userId} />}
+						<a href="#feed" className="btn-secondary">Feed</a>
 						<a href="#chat" className="btn-secondary">Message user</a>
 						<a href="/referrals" className="btn-secondary">Referrals</a>
 						<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
@@ -149,6 +151,9 @@ export default async function ProfilePage({ params }: { params: { userId: string
 				</div>
 				<div id="chat">
 					<Chat userId={userId} initialTo={preferredHandle ? `@${preferredHandle}` : undefined} />
+				</div>
+				<div id="feed">
+					<Feed canPost={!!currentUserId} />
 				</div>
 				<Suggestions quests={suggestions.quests} protocols={suggestions.protocols} yields={suggestions.yields} />
 			</div>
