@@ -1,14 +1,18 @@
+import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
-	const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-	const og = `${appUrl}/api/badge/${params.userId}/og`;
+	const host = headers().get('host') || 'localhost:3000';
+	const protocol = process.env.VERCEL ? 'https' : 'http';
+	const origin = `${protocol}://${host}`;
+	const og = `${origin}/api/badge/${params.userId}/og`;
 	return {
 		title: 'Memory Badge',
 		description: 'Get your Memory Badge',
+		metadataBase: new URL(origin),
 		openGraph: {
 			title: 'Memory Badge',
 			description: 'Get your Memory Badge',
@@ -24,7 +28,7 @@ export async function generateMetadata({ params }: { params: { userId: string } 
 }
 
 export default function SharePage({ params }: { params: { userId: string } }) {
-	const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+	const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
 	return (
 		<div className="min-h-[60vh] flex items-center justify-center">
 			<a className="btn-primary" href={`/profile/${params.userId}`}>
@@ -32,7 +36,21 @@ export default function SharePage({ params }: { params: { userId: string } }) {
 			</a>
 			<script
 				dangerouslySetInnerHTML={{
-					__html: `setTimeout(function(){ location.href='${appUrl}/profile/${params.userId}'; }, 1500);`
+					__html: `
+						(function () {
+							try {
+								var params = new URLSearchParams(location.search);
+								var ref = params.get('ref');
+								if (ref) {
+									fetch('/api/referral', {
+										method: 'POST',
+										headers: { 'Content-Type': 'application/json' },
+										body: JSON.stringify({ refCode: ref })
+									}).catch(function(){});
+								}
+							} catch(e) {}
+							setTimeout(function(){ location.href='${appUrl}/profile/${params.userId}'; }, 800);
+						})();`
 				}}
 			/>
 		</div>
