@@ -1,5 +1,6 @@
 import { formatNumber } from '@/lib/utils';
 import AddFriendButton from '@/components/AddFriendButton';
+import { cookies } from 'next/headers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -8,6 +9,8 @@ export const revalidate = 0;
 export default async function LeaderboardPage({ searchParams }: { searchParams?: { q?: string } }) {
 	const { prisma } = await import('@/lib/db');
 	const q = (searchParams?.q || '').toLowerCase();
+	const currentUserId = cookies().get('mem_user_id')?.value || null;
+	const backHref = currentUserId ? `/profile/${currentUserId}` : '/';
 	const leadersInitial = await prisma.leaderboard.findMany({
 		orderBy: { influenceScore: 'desc' },
 		include: { user: true },
@@ -48,7 +51,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams?:
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
-				<a href="/" className="btn-secondary">← Back</a>
+				<a href={backHref} className="btn-secondary">← Back</a>
 				<h1 className="text-2xl font-semibold">Leaderboard</h1>
 				<form className="flex items-center gap-2" action="/leaderboard" method="GET">
 					<input
