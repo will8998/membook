@@ -94,9 +94,9 @@ export default function RightSidebarChat() {
 	};
 
 	return (
-		<aside className="hidden md:block fixed right-4 top-4 bottom-4 w-80 z-40">
-			<div className="h-full">
-				<div className="card h-full flex flex-col">
+		<aside className="hidden lg:block sticky top-4 self-start">
+			<div className="">
+				<div className="card flex flex-col max-h-[80vh]">
 					<div className="px-3 py-2 border-b border-white/10 text-sm font-medium">Global Chat</div>
 					<div className="flex-1 overflow-auto p-3 space-y-2">
 						{messages.map((m) => (

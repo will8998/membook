@@ -107,29 +107,35 @@ export default async function ProfilePage({ params }: { params: { userId: string
 	}
 
 	return (
-		<div className="space-y-6">
-			<div className="flex items-center justify-between">
-				<a href="/" className="btn-secondary">← Back</a>
-				<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
+		<div className="lg:grid lg:grid-cols-12 lg:gap-6">
+			<div className="hidden lg:block lg:col-span-3">
+				<LeftSidebarFriends />
 			</div>
-			<ProfileCard profile={profile} />
-			<div className="grid gap-4 md:grid-cols-2">
-				<BadgePreview userId={userId} />
-				<div className="space-y-4">
-					<ShareButtons userId={userId} referralCode={user.referralCode} />
-					<form action={refreshAll}>
-						<button className="btn-secondary mt-2" type="submit">Refresh Data</button>
-					</form>
-					<AddIdentityForm userId={userId} />
-					<div className="text-sm text-white/60">
-						Tip: Share your badge link to climb the leaderboard.
+			<div className="lg:col-span-6 space-y-6">
+				<div className="flex items-center justify-between">
+					<a href="/" className="btn-secondary">← Back</a>
+					<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
+				</div>
+				<ProfileCard profile={profile} />
+				<div className="grid gap-4 md:grid-cols-2">
+					<BadgePreview userId={userId} />
+					<div className="space-y-4">
+						<ShareButtons userId={userId} referralCode={user.referralCode} />
+						<form action={refreshAll}>
+							<button className="btn-secondary mt-2" type="submit">Refresh Data</button>
+						</form>
+						<AddIdentityForm userId={userId} />
+						<div className="text-sm text-white/60">
+							Tip: Share your badge link to climb the leaderboard.
+						</div>
 					</div>
 				</div>
+				<Chat userId={userId} />
+				<Suggestions quests={suggestions.quests} protocols={suggestions.protocols} yields={suggestions.yields} />
 			</div>
-			<Chat userId={userId} />
-			<LeftSidebarFriends />
-			<RightSidebarChat />
-			<Suggestions quests={suggestions.quests} protocols={suggestions.protocols} yields={suggestions.yields} />
+			<div className="hidden lg:block lg:col-span-3">
+				<RightSidebarChat />
+			</div>
 		</div>
 	);
 }

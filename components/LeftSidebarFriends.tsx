@@ -24,8 +24,8 @@ export default function LeftSidebarFriends() {
 	}, []);
 
 	return (
-		<aside className="hidden md:block fixed left-4 top-4 bottom-4 w-80 z-40">
-			<div className="h-full flex flex-col gap-4">
+		<aside className="hidden lg:block sticky top-4 self-start">
+			<div className="flex flex-col gap-4">
 				<div className="card h-1/2 flex flex-col">
 					<div className="px-3 py-2 border-b border-white/10 text-sm font-medium">My Friends</div>
 					<div className="flex-1 overflow-auto p-3 space-y-2">
