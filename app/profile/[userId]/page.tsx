@@ -130,7 +130,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 					<div className="flex gap-2">
 						{currentUserId !== userId && <AddFriendButton friendId={userId} />}
 						<a href="#feed" className="btn-secondary">Feed</a>
-						<a href="#chat" className="btn-secondary">Message user</a>
+						<a href={`/messages?to=${userId}`} className="btn-secondary">Message user</a>
 						<a href="/referrals" className="btn-secondary">Referrals</a>
 						<a href="/leaderboard" className="btn-secondary">Leaderboard</a>
 					</div>
@@ -149,9 +149,7 @@ export default async function ProfilePage({ params }: { params: { userId: string
 						</div>
 					</div>
 				</div>
-				<div id="chat">
-					<Chat userId={userId} initialTo={preferredHandle ? `@${preferredHandle}` : undefined} />
-				</div>
+				{/* Removed 'Chat with My Data' from sending DMs; it remains for personal data Q&A elsewhere if needed */}
 				<div id="feed">
 					<Feed canPost={!!currentUserId} />
 				</div>
