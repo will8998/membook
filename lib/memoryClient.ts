@@ -83,11 +83,12 @@ export const MemoryAPI = {
 	getIdentityByFarcaster(username: string) {
 		const u = encodeURIComponent(username);
 		return tryPaths([
-			// Newer docs
-			`/identities/farcaster/${u}`,
-			// Older/alternate paths
+			// As documented: /identities/farcaster/username/{username}
 			`/identities/farcaster/username/${u}`,
-			`/identity/farcaster/username/${u}`
+			// Alternate/legacy path
+			`/identity/farcaster/username/${u}`,
+			// Some deployments may expose without /username
+			`/identities/farcaster/${u}`
 		]);
 	},
 	getIdentityByTwitter(username: string) {
