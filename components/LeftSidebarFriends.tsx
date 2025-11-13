@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { formatHandleForDisplay } from '@/lib/utils';
 import AddFriendButton from './AddFriendButton';
 
 type Row = { userId: string; handle: string; archetype?: string | null; rank?: number | null };
@@ -32,7 +33,7 @@ export default function LeftSidebarFriends() {
 						{friends.length === 0 && <div className="text-sm text-white/60">No friends yet.</div>}
 						{friends.map((f) => (
 							<div key={f.userId} className="flex items-center justify-between gap-2">
-								<a className="hover:underline" href={`/profile/${f.userId}`}>{f.handle}</a>
+								<a className="hover:underline" href={`/profile/${f.userId}`}>{formatHandleForDisplay(f.handle)}</a>
 								<div className="text-xs text-white/60">
 									{f.archetype || '—'} · #{f.rank ?? '-'}
 								</div>
@@ -46,7 +47,7 @@ export default function LeftSidebarFriends() {
 						{suggested.length === 0 && <div className="text-sm text-white/60">No suggestions.</div>}
 						{suggested.map((s) => (
 							<div key={s.userId} className="flex items-center justify-between gap-2">
-								<a className="hover:underline" href={`/profile/${s.userId}`}>{s.handle}</a>
+								<a className="hover:underline" href={`/profile/${s.userId}`}>{formatHandleForDisplay(s.handle)}</a>
 								<div className="flex items-center gap-2">
 									<div className="text-xs text-white/60">{s.archetype || '—'} · #{s.rank ?? '-'}</div>
 									<AddFriendButton friendId={s.userId} />

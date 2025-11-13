@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { formatNumber } from '@/lib/utils';
+import { formatNumber, maskWalletAddress } from '@/lib/utils';
 
 export type Profile = {
 	userId: string;
@@ -54,7 +54,7 @@ export function ProfileCard({ profile, currentUserId }: { profile: Profile; curr
 			{profile.walletAddress && (
 				<div className="bg-white/5 rounded-md p-3">
 					<div className="text-sm text-white/70">Wallet</div>
-					<div className="text-sm font-mono break-all">{profile.walletAddress}</div>
+					<div className="text-sm font-mono break-all">{maskWalletAddress(profile.walletAddress)}</div>
 				</div>
 			)}
 			<div className="space-y-2">
@@ -68,7 +68,7 @@ export function ProfileCard({ profile, currentUserId }: { profile: Profile; curr
 							target="_blank"
 							rel="noreferrer"
 						>
-							{i.platform}:{' '}{i.handle}
+							{i.platform}:{' '}{i.platform === 'wallet' ? maskWalletAddress(i.handle) : i.handle}
 						</a>
 					))}
 				</div>

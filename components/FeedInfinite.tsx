@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { formatHandleForDisplay } from '@/lib/utils';
 
 type Post = { id: string; userId?: string | null; handle: string; content: string; createdAt: string };
 
@@ -98,7 +99,7 @@ export default function FeedInfinite({ canPost }: { canPost: boolean }) {
 			<div className="space-y-3">
 				{posts.map((p) => (
 					<div key={p.id} className="card p-3">
-						<div className="text-sm text-white/60">{p.handle}</div>
+						<div className="text-sm text-white/60">{formatHandleForDisplay(p.handle)}</div>
 						<div className="whitespace-pre-wrap break-words">{p.content}</div>
 					</div>
 				))}

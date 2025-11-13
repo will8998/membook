@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { formatHandleForDisplay } from '@/lib/utils';
 
 type Message = { id: string; handle: string; content: string; createdAt: string };
 
@@ -101,7 +102,7 @@ export default function RightSidebarChat() {
 					<div className="flex-1 overflow-auto p-3 space-y-2">
 						{messages.map((m) => (
 							<div key={m.id} className="break-words whitespace-pre-wrap max-w-full">
-								<span className="text-[var(--mem-accent)]">{m.handle}:</span>{' '}
+								<span className="text-[var(--mem-accent)]">{formatHandleForDisplay(m.handle)}:</span>{' '}
 								<span className="text-white/90">{m.content}</span>
 							</div>
 						))}

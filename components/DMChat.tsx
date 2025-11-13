@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { formatHandleForDisplay } from '@/lib/utils';
 
 type Peer = { userId: string; handle: string; archetype?: string | null };
 type Message = { id: string; senderId: string; receiverId: string; content: string; createdAt: string };
@@ -90,7 +91,7 @@ export default function DMChat({ initialPeerId }: { initialPeerId?: string }) {
 								}`}
 								onClick={() => setActive(p.userId)}
 							>
-								<div className="font-medium">{p.handle}</div>
+								<div className="font-medium">{formatHandleForDisplay(p.handle)}</div>
 								<div className="text-xs text-white/60">{p.archetype || '—'}</div>
 							</button>
 						))}
@@ -101,7 +102,7 @@ export default function DMChat({ initialPeerId }: { initialPeerId?: string }) {
 			<main className="col-span-8 lg:col-span-9">
 				<div className="card h-[70vh] flex flex-col">
 					<div className="px-3 py-2 border-b border-white/10 text-sm font-medium">
-						{activePeer ? `Chat with ${activePeer.handle}` : 'Select a conversation'}
+						{activePeer ? `Chat with ${formatHandleForDisplay(activePeer.handle)}` : 'Select a conversation'}
 					</div>
 					<div className="flex-1 overflow-auto p-3 space-y-2">
 						{messages.map((m) => (

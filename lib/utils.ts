@@ -26,4 +26,26 @@ export function formatNumber(n: number) {
 	return Intl.NumberFormat('en', { notation: 'compact' }).format(n);
 }
 
+export function maskWalletAddress(addr: string, visible = 4) {
+	const s = String(addr || '');
+	const m = s.match(/^0x[a-fA-F0-9]{8,}$/);
+	if (!m) return s;
+	const prefix = '0x';
+	const body = s.slice(2);
+	const first = body.slice(0, visible);
+	const last = body.slice(-visible);
+	return `${prefix}${first}***${last}`;
+}
+
+export function formatHandleForDisplay(handle: string) {
+	const h = String(handle || '');
+	if (h.startsWith('wallet:')) {
+		const addr = h.slice('wallet:'.length);
+		return `wallet:${maskWalletAddress(addr)}`;
+	}
+	// If handle itself is a raw address, mask it too
+	if (/^0x[a-fA-F0-9]{8,}$/.test(h)) return maskWalletAddress(h);
+	return h;
+}
+
 
