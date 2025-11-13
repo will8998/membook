@@ -24,6 +24,8 @@ model User {
   publicMessages  PublicMessage[]
   friendsAdded    Friend[]      @relation("UserFriends")
   friendsOf       Friend[]      @relation("FriendOf")
+  dmsSent         DMMessage[]   @relation("DMSent")
+  dmsReceived     DMMessage[]   @relation("DMReceived")
 }
 
 model Identity {
